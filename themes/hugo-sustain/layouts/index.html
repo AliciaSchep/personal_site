@@ -1,0 +1,19 @@
+{{ partial "head" . }}
+  <body>
+    <div id="wrap">
+      {{ partial "header" . }}
+      <section id="about">
+        <div class="container">
+        <div class="avatar">
+          <img class="img-circle" src="{{ .Site.BaseURL }}img/{{ .Site.Params.avatar }}" alt="Responsive image">
+        </div>
+        <h3>I'm <strong>{{ .Site.Params.author }}</strong>, a full-time human. At work, I'm a data scientist.</h3>
+        <h3>Outside of work, I like hiking, admiring trees, baking bread, and learning.</h3>
+        <h3>To learn about some things I've been thinking about or have worked on, check out the <a href="{{ .Site.BaseURL }}blog/"> blog</a> or <a href="{{ .Site.BaseURL }}software/"> software</a> pages.</h3>
+        {{ partial "social.html" . }}
+        </div>
+      </section>
+    </div>
+    {{ partial "footer" . }}
+  </body>
+</html>

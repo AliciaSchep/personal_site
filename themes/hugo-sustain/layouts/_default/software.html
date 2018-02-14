@@ -1,0 +1,15 @@
+<section id="software">
+  <div class="container">
+    <h3>{{ .Site.Data.software.name }}</h3>
+    <div class="panel panel-default">
+      <div class="panel-body">
+      {{ range $i, $el := .Site.Data.software.source }}
+        <h5>
+          <i class="{{ .icon }}"></i>&nbsp;&nbsp;
+          <strong><a href="{{ $el.url }}">{{ $el.name }}</a></strong>&nbsp;-&nbsp;{{ $el.description }}
+        </h5>
+      {{ end }}
+      </div>
+    </div>
+  </div>
+</section>

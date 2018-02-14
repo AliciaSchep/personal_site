@@ -1,0 +1,27 @@
+name: Software
+source:
+  - icon: fa fa-github
+    name: gglabeller
+    url: https://github.com/AliciaSchep/gglabeller
+    description: An simple shiny gadget for labelling points on a ggplot-created plot.
+
+  - icon: fa fa-github
+    name: iheatmapr
+    url: https://github.com/ropensci/iheatmapr
+    description: An R package for making complex, interactive heatmaps.
+
+  - icon: fa fa-github
+    name: chromVAR
+    url: https://github.com/GreenleafLab/chromVAR
+    description: An R package for analyzing single cell or sparse chromatin accessibility data.
+    
+  - icon: fa fa-github
+    name: motifmatchr
+    url: https://github.com/GreenleafLab/motifmatchr
+    description: An R package for finding sequence motifs, geared towards quickly finding matches between many sequence motifs in many DNA segments.
+    
+  - icon: fa fa-github
+    name: NucleoATAC
+    url: https://github.com/GreenleafLab/NucleoATAC
+    description: A python package for finding nucleosome positions using ATAC-seq data.
+
