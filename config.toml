@@ -20,7 +20,7 @@ enableEmoji = true
   # options for highlight.js (version, additional languages, and theme)
   highlightjsVersion = "9.11.0"
   highlightjsCDN = "https://cdn.bootcss.com"
-  highlightjsLang = ["r", "yaml", "js"]
+  highlightjsLang = ["r", "yaml", "javascript"]
   highlightjsTheme = "github"
   
   # Custom assets can be linked with their paths relative to static/
