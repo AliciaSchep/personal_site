@@ -4,7 +4,7 @@ title = "Alicia"
 # Enable comments by entering your Disqus shortname
 disqusShortname = "aliciaschep"
 # Enable Google Analytics by entering your tracking code
-googleAnalytics = ""
+googleAnalytics = "UA-59776189-2"
 theme = "hugo-sustain"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
 enableEmoji = true
