@@ -34,7 +34,7 @@ df_to_js <- function(x, var_name = "data", ...){
 df_to_js(iris)
 ```
 
-## Importing the javascript libraries.  
+## Importing javascript libraries 
 
 To import javascript libraries, you can add script tags to the body of the R markdown in plain html. Here I wanted to make a plot using dimple.js (which also requires d3). To add it in via an R code chunk so that it shows up in a chunk, the htmltools package is again useful:
 
@@ -45,7 +45,7 @@ htmltools::tagList(
 )
 ```
 
-## Javascript chunk
+## Making a javascript chunk
 
 A javascript chunk is made in R Markdown by specifying "js" instead of "r" as the language in the chunk header. It can also be useful to set the "class.source" chunk option in the header:
 
@@ -133,5 +133,5 @@ window.addEventListener('resize', function(event){
 
 The approach described above for incorporating Javascript in R Markdown works pretty well for incorporating a snippet of javascript into an R Markdown document. However, when editing the document interactively in RStudio, you won't be able to see the immediate output the way you would for R plots &mdash; you can only see the output after knitting the document. 
 
-[^1]: Just moving the 'div' element below the chunk doesn't work, because it won't exist when the code is first run
+[^1]: Just moving the 'div' element below the chunk doesn't work, because it won't exist when the code is first run...
 
