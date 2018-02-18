@@ -2,18 +2,19 @@
 title: "Hello JS in R Markdown"
 author: "Alicia Schep"
 date: "2018-02-10"
+slug: js-rmarkdown
 categories: ["R"]
-tags: ["R Markdown", "javascript", "visualization"]
+tags: ["R Markdown", "javascript", "visualization", "knitr"]
 ---
 
 
 
-<p>One of my goals for this year is to level up my javascript interactive visualization game. I already use (and really like) some of the htmlwidget packages in R that wrap popular javasript visualization libraries, but there can be benefits to using the javascript version rather than the R wrapper if you want to do something more custom.</p>
-<p>However, for most of the things I want to visualize, I’m starting out doing the data wrangling and/or modelling in R (or python) and not javascript, so having to switch languages, documents, and development environment adds some friction. Being able to incorporate javascript visualization code directly into R Markdown documents would make the process much more seamless<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p>
-<p>Luckily, R Markdown allows you to add chunks in different languages, including javascript! A <a href="http://livefreeordichotomize.com/2017/01/24/custom-javascript-visualizations-in-rmarkdown/">blog post from Nick Strayer</a> was really helpful for getting started with JS in R Markdown. The main change I wanted to make from the approach in that post was to place the plot below the code, similar to what happens with R code. After figuring out a quick way to do this, I ended up becoming interested in how knitr’s language engines work and tweaked the javascript engine to add the div based on a chunk option.</p>
+<p>One of many rad features of R Markdown is that, despite the name, you can add chunks in languages other than R, including python, bash, Rcpp, and SQL. Until recently, I hadn’t realized that you could also add javascript chunks — on my version of Rstudio, it doesn’t come up as an option on the insert chunk dropdown. Simply replacing the <code>r</code> at the start of the chunk with <code>js</code> will insert the code within the chunk into script tags in the document. As I’m in the process of learning d3 and exploring various javascript visualization libraries, I was curious to try this feature out.</p>
+<p>A <a href="http://livefreeordichotomize.com/2017/01/24/custom-javascript-visualizations-in-rmarkdown/">blog post from Nick Strayer</a> was really helpful for getting started with JS in R Markdown. The main change I wanted to make from the approach in that post was to place the plot below the code, similar to what happens with R code. After figuring out a quick way to do this, I ended up becoming interested in how knitr’s language engines work, and was pleasantly surprised by how accessible the engines are — with a few lines of code you can add a new chunk option to affect the output of a javascript chunk!</p>
+<p>In this post I’ll go over the basic of adding javascript code to R Markdown and conclude with a modified javascript knitr engine.</p>
 <div id="sending-data-from-r-to-javascript" class="section level2">
 <h2>Sending data from R to javascript</h2>
-<p>Nick’s blog post includes a handy little function for passing a data frame from R to javascript. It converts the data frame to JSON and wraps the JSON object in a <code>&lt;script&gt;</code> tag. I modified this function to enable specifying the variable name and to take advantage of the htmltools tags functionality so that the chunk does not have to be set with option <code>results='asis'</code>:</p>
+<p>If you want to be able to access data from R in a javascript chunk, you’ll need to explicitly pass that data to javascript. Nick’s blog post includes a handy little function for passing a data frame from R to javascript by converting it to JSON and then wrapping it in a <code>&lt;script&gt;</code> tag. I modified this function to enable specifying the variable name and to take advantage of the htmltools tags functionality so that the chunk does not have to be set with option <code>results='asis'</code>:</p>
 <pre class="r"><code># Function adapted from Nick Strayer&#39;s at 
 # http://livefreeordichotomize.com/2017/01/24/custom-javascript-visualizations-in-rmarkdown/
 df_to_js &lt;- function(x, var_name = &quot;data&quot;, ...){
@@ -28,13 +29,13 @@ df_to_js(iris)</code></pre>
 </div>
 <div id="importing-the-javascript-libraries." class="section level2">
 <h2>Importing the javascript libraries.</h2>
-<p>You can add script tags to the body of the R markdown in plain html. To add it in via an R code chunk so that it shows up in a chunk:</p>
+<p>To import javascript libraries, you can add script tags to the body of the R markdown in plain html. Here I wanted to make a plot using dimple.js (which also requires d3). To add it in via an R code chunk so that it shows up in a chunk, the htmltools package is again useful:</p>
 <pre class="r"><code>htmltools::tagList(
   htmltools::tags$script(src = &quot;https://d3js.org/d3.v4.min.js&quot;),
-  htmltools::tags$script(src = &quot;http://dimplejs.org/dist/dimple.v2.3.0.min.js&quot;)
+  htmltools::tags$script(src = &quot;https://cdnjs.cloudflare.com/ajax/libs/dimple/2.3.0/dimple.latest.min.js&quot;)
 )</code></pre>
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="http://dimplejs.org/dist/dimple.v2.3.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dimple/2.3.0/dimple.latest.min.js"></script>
 </div>
 <div id="javascript-chunk" class="section level2">
 <h2>Javascript chunk</h2>
@@ -42,7 +43,7 @@ df_to_js(iris)</code></pre>
 <pre><code>```{js, class.source = &quot;jsvis1&quot;}
 // javascript code goes here
 ```</code></pre>
-<p>The “class.source” option will set the class of the the source code chunk. Assigning that chunk a class name makes it easier to insert a ‘div’ from within the javascript to hold your visualization <em>after</em> the source chunk so that it appears in the right place in the document (or at least behaves similarly to a plot created by an R chunk).</p>
+<p>The “class.source” option will set the class of the the source code chunk. Assigning that chunk a class name makes it easier to insert a ‘div’ from within the javascript to hold your visualization <em>after</em> the source chunk<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> so that it appears in the right place in the document (or at least behaves similarly to a plot created by an R chunk).</p>
 <p>We’ll use jquery to insert the div:</p>
 <pre class="r"><code>htmltools::tags$script(src = &quot;https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js&quot;)</code></pre>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -83,8 +84,8 @@ window.addEventListener('resize', function(event){
 </div>
 <div id="modifiying-the-knitr-language-engine" class="section level2">
 <h2>Modifiying the knitr language engine</h2>
-<p>Using the chunk class to insert the div was pretty easy. I was curious if there was a way to add that extra div by specifying a custom option to the knitr chunk. That ended up being easier than I was expecting thanks to the incredible control knitr lets you take over how chunks in different languages are executed.</p>
-<p>I took a look at what the default knitr “engine” for javascript was by looking up <code>knitr::knit_engines$get(&quot;js&quot;)</code>. I edited that to take into consideration an extra argument, div. If that argument is present, a div is created in front of the output with that id.</p>
+<p>I was curious if there was a way to add that extra div by specifying a custom option to the knitr chunk. That ended up being easier than I was expecting thanks to the incredible control knitr lets you take over how chunks in different languages are executed.</p>
+<p>I took a look at what the default knitr “engine” for javascript was by looking up <code>knitr::knit_engines$get(&quot;js&quot;)</code>. I edited that to take into consideration an extra chunk option, div. If that argument is present, a div is created in front of the output with that id.</p>
 <pre class="r"><code>knitr::knit_engines$set(&quot;js&quot; = function(options){
     out = if (options$eval) {
         div_pre &lt;- if (!is.null(options$div)) 
@@ -97,12 +98,6 @@ window.addEventListener('resize', function(event){
     }
     options$results = &quot;asis&quot;
     knitr::engine_output(options, options$code, out)
-})
-
-knitr::knit_hooks$set(capture = function(before, options, envir){
-  if (!before) envir[[options$capture]] &lt;- 
-      paste(options$code, collapse = &quot;\n&quot;)
-  &quot;&quot;
 })</code></pre>
 <p>For the next chunk we set it up like:</p>
 <pre><code>```{js, div = &quot;vis2&quot;}
@@ -141,7 +136,7 @@ window.addEventListener('resize', function(event){
 </div>
 <div id="the-downsides-of-js-in-r-markdown" class="section level2">
 <h2>The downsides of JS in R Markdown</h2>
-<p>The approach described above for incorporating Javascript in R Markdown works pretty well for incorporating a snippet of javascript into an R Markdown docuemnt. However, when editing the document interactively in RStudio, you won’t be able to see the immediate output the way you would for R plots — you can only see the output after knitting the document. My next post will cover an alternate way of incorporating custom JS into R and R Markdown…</p>
+<p>The approach described above for incorporating Javascript in R Markdown works pretty well for incorporating a snippet of javascript into an R Markdown document. However, when editing the document interactively in RStudio, you won’t be able to see the immediate output the way you would for R plots — you can only see the output after knitting the document.</p>
 </div>
 <div class="footnotes">
 <hr />
