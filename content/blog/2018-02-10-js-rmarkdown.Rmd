@@ -129,9 +129,11 @@ window.addEventListener('resize', function(event){
 ```
 
 
+Yippee!
+
 ## The downsides of JS in R Markdown
 
 The approach described above for incorporating Javascript in R Markdown works pretty well for incorporating a snippet of javascript into an R Markdown document. However, when editing the document interactively in RStudio, you won't be able to see the immediate output the way you would for R plots &mdash; you can only see the output after knitting the document. 
 
-[^1]: Just moving the 'div' element below the chunk doesn't work, because it won't exist when the code is first run...
+[^1]: Just moving the 'div' element below the chunk doesn't work, because it won't exist when the code is first run... Alternatively you could modify the javascript code (either wihtin the chunk or via the knitr engine) to only run after the document has been created.
 

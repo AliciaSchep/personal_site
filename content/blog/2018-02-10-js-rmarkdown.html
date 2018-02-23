@@ -133,6 +133,7 @@ window.addEventListener('resize', function(event){
   chart2.draw(0, true);
 });
 </script>
+<p>Yippee!</p>
 </div>
 <div id="the-downsides-of-js-in-r-markdown" class="section level2">
 <h2>The downsides of JS in R Markdown</h2>
@@ -141,6 +142,6 @@ window.addEventListener('resize', function(event){
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Just moving the ‘div’ element below the chunk doesn’t work, because it won’t exist when the code is first run…<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>Just moving the ‘div’ element below the chunk doesn’t work, because it won’t exist when the code is first run… Alternatively you could modify the javascript code (either wihtin the chunk or via the knitr engine) to only run after the document has been created.<a href="#fnref1">↩</a></p></li>
 </ol>
 </div>
